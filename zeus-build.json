@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "dotnet": {
+    "project": "src/Zeus.Community.Wled/Zeus.Community.Wled.csproj",
+    "configuration": "Release"
+  },
+  "node": [
+    { "directory": "web", "script": "build" }
+  ],
+  "package": {
+    "plugin.json": "src/Zeus.Community.Wled/plugin.json",
+    "LICENSE": "LICENSE",
+    "THIRD-PARTY-NOTICES.txt": "THIRD-PARTY-NOTICES.txt",
+    "ui/wled.js": "web/dist/wled.js"
+  }
+}

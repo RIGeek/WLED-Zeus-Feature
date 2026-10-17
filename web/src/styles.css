@@ -1,0 +1,149 @@
+.com-n1mjf-wled { font-family: var(--font-sans); color: var(--fg-1); background: transparent; padding: 10px; display: grid; gap: 10px; box-sizing: border-box; align-content: start; height: 100%; max-height: 100%; min-height: 0; overflow-x: hidden; overflow-y: auto; }
+.com-n1mjf-wled *, .com-n1mjf-wled *::before, .com-n1mjf-wled *::after { box-sizing: border-box; }
+.com-n1mjf-wled .zw-card { background: linear-gradient(180deg, var(--panel-top), var(--panel-bot)); border: 1px solid var(--panel-border); border-radius: var(--r-md); padding: 10px 12px; display: grid; gap: 8px; }
+.com-n1mjf-wled .zw-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.com-n1mjf-wled .zw-title { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--fg-1); }
+.com-n1mjf-wled .zw-label { margin: 0; font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--fg-3); }
+.com-n1mjf-wled .zw-pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px; border-radius: var(--r-lg); border: 1px solid var(--line-strong); background: var(--bg-inset); font-size: 11px; color: var(--fg-1); }
+.com-n1mjf-wled .zw-pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--fg-3); }
+.com-n1mjf-wled .zw-pill.ok::before { background: var(--ok); }
+.com-n1mjf-wled .zw-pill.warn::before { background: var(--amber); }
+.com-n1mjf-wled .zw-pill.tx { color: var(--tx); border-color: var(--tx); }
+.com-n1mjf-wled .zw-pill.tx::before { background: var(--tx); }
+.com-n1mjf-wled .zw-meters { display: grid; gap: 5px; }
+.com-n1mjf-wled .zw-meter { display: grid; gap: 3px; }
+.com-n1mjf-wled .zw-meter-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.com-n1mjf-wled .zw-meter .val { font-family: var(--font-mono); font-size: 15px; font-weight: 600; color: var(--fg-0); font-variant-numeric: tabular-nums; }
+.com-n1mjf-wled .zw-meter .unit { font-size: 10px; color: var(--fg-3); margin-left: 3px; }
+.com-n1mjf-wled .zw-readouts { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr); gap: 6px; align-items: stretch; }
+.com-n1mjf-wled .zw-read { background: var(--bg-inset); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 6px 8px; display: grid; gap: 3px; }
+.com-n1mjf-wled .zw-read .v { font-family: var(--font-mono); font-size: 17px; font-weight: 600; color: var(--fg-0); font-variant-numeric: tabular-nums; }
+.com-n1mjf-wled .zw-read .v.warn { color: var(--amber); }
+.com-n1mjf-wled .zw-group { display: grid; gap: 6px; }
+.com-n1mjf-wled .zw-row { display: flex; flex-wrap: wrap; gap: 5px; }
+.com-n1mjf-wled button { font: inherit; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-1); background: var(--bg-3); border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 5px 11px; min-height: 30px; cursor: pointer; transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); }
+.com-n1mjf-wled button:hover:not(:disabled) { background: var(--bg-2); border-color: var(--accent); color: var(--fg-0); }
+.com-n1mjf-wled button[aria-pressed="true"] { background: var(--accent); color: var(--bg-0); border-color: var(--accent-bright); }
+.com-n1mjf-wled button.zw-warn[aria-pressed="true"] { background: var(--amber); border-color: var(--amber); }
+.com-n1mjf-wled button:disabled { opacity: .45; cursor: not-allowed; }
+.com-n1mjf-wled button:focus-visible, .com-n1mjf-wled input:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
+.com-n1mjf-wled input[type="text"] { font: inherit; font-family: var(--font-mono); font-size: 13px; color: var(--fg-0); background: var(--bg-inset); border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 5px 8px; min-height: 30px; min-width: 0; flex: 1 1 150px; }
+.com-n1mjf-wled select { font: inherit; font-family: var(--font-mono); font-size: 13px; color: var(--fg-0); background: var(--bg-inset); border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 4px 6px; min-height: 30px; min-width: 0; max-width: 200px; }
+.com-n1mjf-wled label.zw-check { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--fg-1); }
+.com-n1mjf-wled input[type="checkbox"] { accent-color: var(--accent); }
+.com-n1mjf-wled .zw-note { font-size: 11px; color: var(--fg-3); margin: 0; }
+.com-n1mjf-wled .zw-msg { font-size: 12px; min-height: 16px; color: var(--fg-1); }
+.com-n1mjf-wled .zw-msg.err { color: var(--amber); }
+.com-n1mjf-wled .zw-empty { color: var(--fg-2); font-size: 13px; padding: 6px 0; margin: 0; }
+@media (prefers-reduced-motion: reduce) { .com-n1mjf-wled .zw-bar > i, .com-n1mjf-wled button { transition: none; } }
+.com-n1mjf-wled .zw-form { display: grid; gap: 8px; }
+.com-n1mjf-wled .zw-head-end { display: flex; align-items: center; gap: 8px; }
+.com-n1mjf-wled button.zw-icon { display: inline-flex; align-items: center; justify-content: center; padding: 0; width: 30px; min-height: 30px; color: var(--fg-2); background: transparent; border-color: var(--line); }
+.com-n1mjf-wled button.zw-icon:hover:not(:disabled) { color: var(--fg-0); }
+.com-n1mjf-wled .zw-read.big .v { font-size: 24px; line-height: 1.1; }
+.com-n1mjf-wled .zw-read.z-ok .v { color: var(--ok); }
+.com-n1mjf-wled .zw-read.z-warn .v { color: var(--amber); }
+.com-n1mjf-wled .zw-read.z-bad .v { color: var(--tx); }
+.com-n1mjf-wled .zw-zone { margin-left: 6px; padding: 0 5px; border: 1px solid currentColor; border-radius: var(--r-xs); font-size: 9px; letter-spacing: .08em; text-transform: uppercase; }
+.com-n1mjf-wled .zw-zone.warn { color: var(--amber); }
+.com-n1mjf-wled .zw-zone.bad { color: var(--tx); }
+.com-n1mjf-wled .zw-meter-head .zw-zone { margin-right: auto; }
+.com-n1mjf-wled .zw-card.faulted { border-color: var(--tx); }
+.com-n1mjf-wled .zw-fault { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--tx); border-left-width: 4px; border-radius: var(--r-sm); background: var(--bg-inset); color: var(--fg-0); }
+.com-n1mjf-wled .zw-fault-icon { flex: none; color: var(--tx); }
+.com-n1mjf-wled .zw-fault-text { display: grid; gap: 2px; flex: 1 1 160px; min-width: 0; font-size: 12px; }
+.com-n1mjf-wled .zw-fault-text strong { color: var(--tx); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+.com-n1mjf-wled .zw-fault-text span { color: var(--fg-1); }
+.com-n1mjf-wled .zw-fault button { flex: none; border-color: var(--tx); }
+.com-n1mjf-wled .zw-range { display: grid; gap: 5px; padding: 8px 0; border-top: 1px solid var(--line); }
+.com-n1mjf-wled .zw-range-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.com-n1mjf-wled .zw-range-name { font-size: 12px; font-weight: 700; color: var(--fg-0); }
+.com-n1mjf-wled .zw-range-name .unit { font-weight: 400; color: var(--fg-3); }
+.com-n1mjf-wled .zw-range-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(68px, 1fr)); gap: 6px; }
+.com-n1mjf-wled .zw-num { display: grid; gap: 2px; min-width: 0; }
+.com-n1mjf-wled .zw-grow { flex: 1 1 140px; }
+.com-n1mjf-wled .zw-chime-row { align-items: end; }
+.com-n1mjf-wled input[type="number"] { font: inherit; font-family: var(--font-mono); font-size: 13px; color: var(--fg-0); background: var(--bg-inset); border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 4px 6px; min-height: 30px; min-width: 0; width: 100%; }
+.com-n1mjf-wled input[type="number"][aria-invalid="true"] { border-color: var(--amber); }
+.com-n1mjf-wled input[type="range"] { accent-color: var(--accent); width: 100%; min-height: 24px; }
+.com-n1mjf-wled .zw-strip { height: 6px; border-radius: var(--r-xs); border: 1px solid var(--line); }
+
+/* LED-style bar. ::before is the dim full-scale track, i the lit part (clipped to the value), ::after the segment gaps. */
+.com-n1mjf-wled .zw-bar { --zw-fill: var(--accent); position: relative; height: 8px; background: var(--bg-inset); border: 1px solid var(--line); border-radius: var(--r-xs); overflow: hidden; }
+.com-n1mjf-wled .zw-bar.banded { --zw-fill: linear-gradient(90deg, var(--ok) 0, var(--ok) var(--wp), var(--amber) var(--wp), var(--amber) var(--bp), var(--tx) var(--bp), var(--tx) 100%); }
+.com-n1mjf-wled .zw-bar.z-ok { --zw-fill: var(--ok); }
+.com-n1mjf-wled .zw-bar.z-warn { --zw-fill: var(--amber); }
+.com-n1mjf-wled .zw-bar.z-bad { --zw-fill: var(--tx); }
+.com-n1mjf-wled .zw-bar.stale { --zw-fill: var(--fg-3); }
+.com-n1mjf-wled .zw-bar::before { content: ""; position: absolute; inset: 0; background: var(--zw-fill); opacity: .22; }
+.com-n1mjf-wled .zw-bar > i { position: absolute; inset: 0; display: block; background: var(--zw-fill); transition: clip-path var(--dur-fast) var(--ease-out); }
+.com-n1mjf-wled .zw-bar > i::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, var(--fg-0), transparent 60%); opacity: .2; }
+.com-n1mjf-wled .zw-bar::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: repeating-linear-gradient(90deg, transparent 0, transparent 2px, var(--bg-inset) 2px, var(--bg-inset) 3px); opacity: .7; }
+.com-n1mjf-wled .zw-notch { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--tx); z-index: 3; opacity: .9; }
+.com-n1mjf-wled .zw-tip { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -2px; background: var(--fg-0); z-index: 3; opacity: .9; transition: left var(--dur-fast) var(--ease-out); }
+.com-n1mjf-wled .zw-bar.stale .zw-tip { opacity: .4; }
+.com-n1mjf-wled .zw-peak { position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: var(--fg-0); z-index: 4; }
+@media (prefers-reduced-motion: reduce) { .com-n1mjf-wled .zw-bar > i, .com-n1mjf-wled .zw-tip { transition: none; } }
+
+/* ---- shared with the Home Assistant panel ---- */
+.com-n1mjf-wled .zw-bar.banded-low { --zw-fill: linear-gradient(90deg, var(--tx) 0, var(--tx) var(--bp), var(--amber) var(--bp), var(--amber) var(--wp), var(--ok) var(--wp), var(--ok) 100%); }
+.com-n1mjf-wled .zw-readouts.auto { grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); }
+.com-n1mjf-wled .zw-read .k { overflow-wrap: anywhere; line-height: 1.35; }
+.com-n1mjf-wled .zw-read .v { overflow-wrap: anywhere; }
+.com-n1mjf-wled .zw-read .v .unit { font-size: 11px; color: var(--fg-3); margin-left: 3px; font-weight: 400; }
+.com-n1mjf-wled .zw-read.off .v, .com-n1mjf-wled .zw-read.na .v { color: var(--fg-2); }
+.com-n1mjf-wled .zw-read.on .v { color: var(--accent-bright); }
+.com-n1mjf-wled .zw-meter .zw-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.com-n1mjf-wled button.zw-arm { background: var(--bg-inset); border-color: var(--amber); color: var(--amber); }
+.com-n1mjf-wled button.zw-flash { background: var(--accent); color: var(--bg-0); border-color: var(--accent-bright); }
+.com-n1mjf-wled button.zw-na { text-decoration: line-through; }
+.com-n1mjf-wled .zw-lock { display: inline-flex; vertical-align: -2px; margin-right: 5px; color: var(--fg-3); }
+.com-n1mjf-wled button[aria-pressed="true"] .zw-lock { color: var(--bg-0); }
+.com-n1mjf-wled input[type="password"], .com-n1mjf-wled input[type="search"] { font: inherit; font-family: var(--font-mono); font-size: 13px; color: var(--fg-0); background: var(--bg-inset); border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 5px 8px; min-height: 30px; min-width: 0; flex: 1 1 150px; width: 100%; }
+.com-n1mjf-wled input[type="password"]:focus-visible, .com-n1mjf-wled input[type="search"]:focus-visible, .com-n1mjf-wled select:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
+.com-n1mjf-wled .zw-list { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.com-n1mjf-wled .zw-item { display: grid; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.com-n1mjf-wled .zw-item-row { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.com-n1mjf-wled .zw-item-text { display: grid; gap: 1px; min-width: 0; flex: 1 1 auto; }
+.com-n1mjf-wled .zw-item-name { font-size: 12px; font-weight: 700; color: var(--fg-0); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.com-n1mjf-wled .zw-item-id { font-family: var(--font-mono); font-size: 11px; color: var(--fg-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.com-n1mjf-wled .zw-kind { flex: none; font-family: var(--font-mono); font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--fg-2); border: 1px solid var(--line-strong); border-radius: var(--r-xs); padding: 1px 5px; }
+.com-n1mjf-wled button.zw-icon { flex: none; width: 28px; min-height: 28px; padding: 0; display: inline-flex; align-items: center; justify-content: center; color: var(--fg-2); background: transparent; border-color: var(--line); }
+.com-n1mjf-wled button.zw-icon:hover:not(:disabled) { color: var(--fg-0); }
+.com-n1mjf-wled .zw-editor { display: grid; gap: 8px; padding: 8px 10px 10px; background: var(--bg-inset); border: 1px solid var(--line); border-radius: var(--r-sm); }
+.com-n1mjf-wled .zw-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 6px; }
+.com-n1mjf-wled .zw-results { display: grid; max-height: 260px; overflow-y: auto; border: 1px solid var(--line); border-radius: var(--r-sm); background: var(--bg-inset); }
+.com-n1mjf-wled button.zw-result { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 36px; text-align: left; text-transform: none; letter-spacing: normal; font-weight: 400; background: transparent; border: 0; border-bottom: 1px solid var(--line); border-radius: 0; padding: 5px 8px; }
+.com-n1mjf-wled button.zw-result:last-child { border-bottom: 0; }
+.com-n1mjf-wled button.zw-result:hover:not(:disabled) { background: var(--bg-2); border-color: var(--line); }
+.com-n1mjf-wled button.zw-result:disabled { opacity: .55; }
+.com-n1mjf-wled .zw-result-state { margin-left: auto; flex: none; max-width: 40%; font-family: var(--font-mono); font-size: 11px; color: var(--fg-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ---- WLED additions ---- */
+.com-n1mjf-wled .zw-ctl { display: grid; gap: 6px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+.com-n1mjf-wled .zw-ctl:last-child { border-bottom: 0; padding-bottom: 0; }
+.com-n1mjf-wled .zw-ctl-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.com-n1mjf-wled .zw-ctl-name { flex: 0 1 auto; max-width: 55%; font-size: 13px; font-weight: 700; color: var(--fg-0); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.com-n1mjf-wled .zw-ctl-meta { font-family: var(--font-mono); font-size: 11px; color: var(--fg-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; flex: 1 1 auto; }
+.com-n1mjf-wled .zw-segs { display: flex; flex-wrap: wrap; gap: 4px; }
+.com-n1mjf-wled button.zw-seg { min-height: 26px; padding: 2px 8px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; text-transform: none; font-weight: 600; background: var(--bg-inset); color: var(--fg-2); border-color: var(--line-strong); }
+.com-n1mjf-wled button.zw-seg.driven { color: var(--bg-0); background: var(--accent); border-color: var(--accent-bright); }
+.com-n1mjf-wled button.zw-seg.off { text-decoration: line-through; }
+.com-n1mjf-wled .zw-rule { display: grid; gap: 4px; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.com-n1mjf-wled .zw-rule:last-child { border-bottom: 0; }
+.com-n1mjf-wled .zw-rule-head { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.com-n1mjf-wled .zw-dot { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--fg-3); opacity: .5; }
+.com-n1mjf-wled .zw-dot.on { background: var(--ok); opacity: 1; }
+.com-n1mjf-wled .zw-dot.err { background: var(--amber); opacity: 1; }
+.com-n1mjf-wled .zw-rule-text { display: grid; gap: 1px; min-width: 0; flex: 1 1 auto; }
+.com-n1mjf-wled .zw-rule-name { font-size: 12px; font-weight: 700; color: var(--fg-0); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.com-n1mjf-wled .zw-rule-where { font-family: var(--font-mono); font-size: 11px; color: var(--fg-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.com-n1mjf-wled .zw-swatch { flex: none; width: 14px; height: 14px; border-radius: var(--r-xs); border: 1px solid var(--line-strong); }
+.com-n1mjf-wled input[type="color"] { width: 100%; min-width: 44px; height: 30px; padding: 2px; background: var(--bg-inset); border: 1px solid var(--line-strong); border-radius: var(--r-sm); cursor: pointer; }
+.com-n1mjf-wled input[type="color"]:focus-visible { outline: 2px solid var(--accent-bright); outline-offset: 2px; }
+.com-n1mjf-wled .zw-bands { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 6px; }
+.com-n1mjf-wled .zw-section { display: grid; gap: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+.com-n1mjf-wled .zw-section:first-of-type { border-top: 0; padding-top: 0; }
+.com-n1mjf-wled .zw-src { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; color: var(--fg-1); }
+.com-n1mjf-wled .zw-rule .zw-bar { margin-left: 16px; }
+.com-n1mjf-wled .zw-read.testing { border-color: var(--accent); }

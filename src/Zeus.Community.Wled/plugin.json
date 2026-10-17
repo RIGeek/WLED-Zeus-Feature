@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "com.n1mjf.wled",
+  "name": "WLED",
+  "version": "0.1.0",
+  "author": "N1MJF",
+  "description": "Drive WLED lights from the radio: transmit and band colours, S-meter, power, SWR and mic level bars.",
+  "homepage": "https://github.com/RIGeek/WLED-Zeus-Feature",
+  "license": "GPL-2.0-or-later",
+  "sdk": { "abi": 1, "minVersion": "1.5.0" },
+  "entrypoint": {
+    "assembly": "Zeus.Community.Wled.dll",
+    "type": "Zeus.Community.Wled.WledPlugin"
+  },
+  "capabilities": ["NetworkAccess", "ReadRadioState", "PersistSettings"],
+  "permissions": {
+    "network": true,
+    "fileSystemRead": false,
+    "fileSystemWrite": false
+  },
+  "ui": {
+    "modules": ["ui/wled.js"],
+    "panels": [
+      {
+        "id": "wled",
+        "title": "WLED",
+        "slot": "workspace.wled",
+        "category": "controls"
+      }
+    ]
+  }
+}
