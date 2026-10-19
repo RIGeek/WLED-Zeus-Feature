@@ -179,7 +179,37 @@ internal sealed class WledService : IAsyncDisposable
     private async Task ApplySourcesAsync(SourceSettings s)
     {
         await Tci.StartAsync(s.TciEnabled ? s.TciHost : null, s.TciPort, s.TciIntervalMs).ConfigureAwait(false);
-        await Amp.StartAsync(s.AmpEnabled ? s.ZeusUrl : null).ConfigureAwait(false);
+        await ApplyAmpAsync(s).ConfigureAwait(false);
+    }
+
+    private Task ApplyAmpAsync(SourceSettings s)
+    {
+        if (!s.AmpEnabled) return Amp.StartAsync(null, "off");
+        if (s.ZeusUrl is { } manual) return Amp.StartAsync(AmpSource.StatusUri(manual), "off");
+        return Amp.StartAsync(DetectedAmpStatus, "waiting_for_zeus");
+    }
+
+    /// <summary>
+    /// Where the amplifier feature's status route is on this Zeus, worked out from the requests the
+    /// panel makes to this feature: they arrive on Zeus's API listener under its plugin prefix, so the
+    /// amp's route is the same address and prefix with the other plugin id. Null until the panel has
+    /// been opened once since Zeus started.
+    /// </summary>
+    public Uri? DetectedAmpStatus { get; private set; }
+
+    /// <summary>Records the address a panel request came in on; restarts amp polling if it changed.</summary>
+    public void NoteApiAddress(Uri amp)
+    {
+        if (amp == DetectedAmpStatus) return;
+        DetectedAmpStatus = amp;
+        var s = _settings.Sources;
+        if (s.AmpEnabled && s.ZeusUrl is null && Amp.Target != amp)
+            _ = Task.Run(async () =>
+            {
+                await _settingsLock.WaitAsync().ConfigureAwait(false);
+                try { await ApplyAmpAsync(_settings.Sources).ConfigureAwait(false); }
+                finally { _settingsLock.Release(); }
+            });
     }
 
     // ------------------------------------------------------------------ actions
@@ -263,7 +293,7 @@ internal sealed class WledService : IAsyncDisposable
             new ApiRadio(_radio.Available, tx.Valid ? tx.Number > 0 : null, band.Text),
             new ApiSources(
                 new ApiLink(s.TciEnabled, tciState, tciError, tciEndpoint, null),
-                new ApiLink(s.AmpEnabled, ampState, ampError, s.ZeusUrl, ampFull)),
+                new ApiLink(s.AmpEnabled, ampState, ampError, Amp.Target?.ToString(), ampFull)),
             signals,
             _clients.Values.Select(c => c.Describe()).OrderBy(c => _settings.Controllers.ToList().FindIndex(x => x.Id == c.Id)).ToArray(),
             rules,

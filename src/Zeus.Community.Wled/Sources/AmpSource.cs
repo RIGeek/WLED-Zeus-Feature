@@ -22,6 +22,7 @@ internal sealed class AmpSource : IAsyncDisposable
     private string _state = "off";
     private string? _error;
     private double? _fullScale;
+    private Uri? _uri;
 
     /// <summary>The engine sets this; the amplifier is only polled while some rule needs it.</summary>
     public Func<bool> Wanted { get; set; } = () => true;
@@ -42,19 +43,26 @@ internal sealed class AmpSource : IAsyncDisposable
 
     public static Uri StatusUri(string zeusBaseUrl) => new($"{zeusBaseUrl.TrimEnd('/')}/api/plugins/{AmpPluginId}/status");
 
-    public async Task StartAsync(string? zeusBaseUrl)
+    public Task StartAsync(string? zeusBaseUrl) => StartAsync(zeusBaseUrl is null ? null : StatusUri(zeusBaseUrl), "off");
+
+    /// <summary>(Re)starts polling this status address; null stops, showing <paramref name="idleState"/>.</summary>
+    public async Task StartAsync(Uri? statusUri, string idleState)
     {
         await StopAsync().ConfigureAwait(false);
         lock (_gate)
         {
             _error = null;
-            if (zeusBaseUrl is null) { _state = "off"; return; }
+            _uri = statusUri;
+            if (statusUri is null) { _state = idleState; return; }
             _state = "idle";
             var cts = new CancellationTokenSource();
             _cts = cts;
-            _task = Task.Run(() => PollAsync(StatusUri(zeusBaseUrl), cts.Token));
+            _task = Task.Run(() => PollAsync(statusUri, cts.Token));
         }
     }
+
+    /// <summary>The status address being polled, if any.</summary>
+    public Uri? Target { get { lock (_gate) return _uri; } }
 
     private async Task StopAsync()
     {
@@ -80,7 +88,13 @@ internal sealed class AmpSource : IAsyncDisposable
 
     private async Task PollAsync(Uri uri, CancellationToken ct)
     {
-        using var http = _handler is null ? new HttpClient() : new HttpClient(_handler, disposeHandler: false);
+        // Zeus on this machine may use a self-signed certificate; only a loopback address skips the check.
+        var loopback = uri.IsLoopback;
+        using var http = _handler is not null ? new HttpClient(_handler, disposeHandler: false)
+            : new HttpClient(new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = loopback ? HttpClientHandler.DangerousAcceptAnyServerCertificateValidator : null,
+            });
         http.Timeout = TimeSpan.FromSeconds(3);
         var failures = 0;
         while (!ct.IsCancellationRequested)
@@ -95,7 +109,7 @@ internal sealed class AmpSource : IAsyncDisposable
             try
             {
                 using var res = await http.GetAsync(uri, ct).ConfigureAwait(false);
-                if ((int)res.StatusCode == 404) throw new AmpException("The amplifier feature is not installed in this Zeus (or the address is not Zeus)");
+                if ((int)res.StatusCode == 404) throw new AmpException($"No amplifier feature at {uri.GetLeftPart(UriPartial.Path)} (is the RZ1ZR LDMOS Amplifier feature installed and enabled?)");
                 if ((int)res.StatusCode == 503) throw new AmpException("The amplifier feature is not running");
                 if (!res.IsSuccessStatusCode) throw new AmpException($"Zeus answered HTTP {(int)res.StatusCode}");
                 await using var body = await res.Content.ReadAsStreamAsync(ct).ConfigureAwait(false);

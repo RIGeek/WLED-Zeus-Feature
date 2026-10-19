@@ -32,7 +32,7 @@ to the amplifier.
 | --- | --- |
 | Transmitting, band | Zeus itself (`ReadRadioState`): MOX and VFO frequency. If a Zeus build does not share radio state, transmit comes from TCI instead. |
 | S-meter, mic level, radio power, SWR, tuning | Zeus's **TCI server** (on by default at `127.0.0.1:40001`): the `rx_sensors` / `tx_sensors` streams. Enable TCI in Zeus. The feature never sends a TCI command that changes the radio. |
-| Amp power, amp SWR | The **RZ1ZR LDMOS Amplifier** feature's read-only `status` route on this Zeus. Zeus features cannot call each other directly, so this needs the Zeus address (the panel's **Use this Zeus** button fills it in). It is only polled while a rule uses it. |
+| Amp power, amp SWR | The **RZ1ZR LDMOS Amplifier** feature's read-only `status` route on this Zeus. Zeus features cannot call each other directly, so this goes over HTTP. The address is found automatically: the WLED panel's own requests arrive on Zeus's API listener under its plugin prefix, so the amp's route is the same address with the other plugin id (open the WLED panel once after Zeus starts). An address can still be entered by hand. It is only polled while a rule uses it. |
 
 ## Setting up
 
@@ -62,7 +62,7 @@ dropped and the latest wins, so nothing queues up and the lights never lag behin
 
     cd web && npm run build && cd ..
     dotnet build src/Zeus.Community.Wled/Zeus.Community.Wled.csproj -c Release
-    dotnet run tests/Wled.Tests.cs          # 17 tests against mock WLED, TCI and amplifier
+    dotnet run tests/Wled.Tests.cs          # 18 tests against mock WLED, TCI and amplifier
     cd src/Zeus.Community.Wled && pwsh ./build-package.ps1
 
 ### Try the panel without Zeus or lights

@@ -163,7 +163,6 @@ internal static class Validate
             else return (null, "Enter the Zeus address: the one in your browser's address bar when Zeus is open");
         }
         var ampEnabled = s.AmpEnabled ?? current.AmpEnabled;
-        if (ampEnabled && zeus is null) return (null, "Amplifier readings need the Zeus address");
         return (new SourceSettings(
             s.TciEnabled ?? current.TciEnabled, tciHost, port,
             Math.Clamp(s.TciIntervalMs ?? current.TciIntervalMs, 30, 1000),

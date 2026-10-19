@@ -190,7 +190,7 @@ Test("amp: missing feature is reported plainly", async () =>
     var hub = new SignalHub();
     await using var src = new AmpSource(NullLogger.Instance, hub) { Interval = TimeSpan.FromMilliseconds(30) };
     await src.StartAsync(amp.Url);
-    Check(await Until(() => src.Describe().Error?.Contains("not installed") == true), "404 explained: " + src.Describe().Error);
+    Check(await Until(() => src.Describe().Error?.Contains("installed and enabled") == true), "404 explained: " + src.Describe().Error);
     await amp.App.StopAsync();
 });
 
@@ -353,8 +353,6 @@ Test("http: routes, validation and cross-site protection", async () =>
     Check(code == 400, "bad rule refused");
     (code, body) = await Post("rules", $"{{\"rules\":[{{\"signal\":\"ampPower\",\"controller\":\"{cid}\",\"segment\":1,\"style\":\"leds\"}}]}}");
     Check(code == 200 && body!["rules"]![0]!["gate"]!.GetValue<string>() == "tx" && body["rules"]![0]!["meter"]!["max"]!.GetValue<double>() == 1300, "rule saved with defaults");
-    (code, body) = await Post("sources", "{\"ampEnabled\":true}");
-    Check(code == 400 && body!["message"]!.GetValue<string>().Contains("Zeus address"), "amp needs the zeus address");
     (code, body) = await Post("sources", "{\"ampEnabled\":true,\"zeusUrl\":\"http://127.0.0.1:9\",\"tciEnabled\":false}");
     Check(code == 200, "sources saved");
     (code, body) = await Post("identify", $"{{\"controller\":\"{cid}\",\"segment\":1}}");
@@ -398,6 +396,48 @@ Test("settings: saved settings survive a restart", async () =>
     await s2.StartAsync(CancellationToken.None);
     await using var _ = s2;
     Check(s2.GetSettings().Rules.Count == 1 && s2.GetSettings().Controllers[0].Name == "Desk", "reloaded");
+    await wled.App.StopAsync();
+});
+
+Test("amp: found automatically from the panel's own requests, whatever port the page uses", async () =>
+{
+    var wled = await MockWled.StartAsync(2, true);
+    var service = new WledService(NullLogger.Instance, new MemorySettingsStore(), new FakeRadioFeed());
+    await service.StartAsync(CancellationToken.None);
+    await using var svc = service;
+    var builder = WebApplication.CreateSlimBuilder();
+    builder.WebHost.UseUrls("http://127.0.0.1:0");
+    builder.Logging.ClearProviders();
+    var app = builder.Build();
+    // Zeus with a path prefix, the amp feature and this feature side by side.
+    var amp = new JsonObject
+    {
+        ["connection"] = new JsonObject { ["state"] = "connected" },
+        ["meters"] = new JsonObject { ["fresh"] = true, ["forwardW"] = 488.0, ["swr"] = 1.3 },
+        ["limits"] = new JsonObject { ["forwardW"] = 1300.0 },
+    };
+    app.MapGet("/zeus/api/plugins/com.n1mjf.hfamp/status", () => Results.Text(amp.ToJsonString(), "application/json"));
+    WledEndpoints.Map(app.MapGroup("/zeus/api/plugins/com.n1mjf.wled"), () => service);
+    await app.StartAsync();
+    var api = new Uri(app.Urls.First());
+
+    var (_, cs) = await service.SetControllersAsync([new ControllerInput(null, "Desk", wled.Host, true, 20, true)], CancellationToken.None);
+    await service.SetRulesAsync([Rule(cs![0].Id, "ampPower", 0, "percent", "always")], CancellationToken.None);
+    var r = await service.SetSourcesAsync(new SourceInput(false, null, null, null, true, ""), CancellationToken.None);
+    Check(r.Ok, "amp enabled without an address: " + r.Message);
+    Check(service.BuildStatus().Sources.Amp.State == "waiting_for_zeus", "waits for the panel");
+
+    // The page is on another port; the request reaches the API listener with that Host header.
+    using var http = new HttpClient();
+    using var req = new HttpRequestMessage(HttpMethod.Get, new Uri(api, "/zeus/api/plugins/com.n1mjf.wled/status"));
+    req.Headers.Host = "zeus-shack.local:8080";
+    (await http.SendAsync(req)).EnsureSuccessStatusCode();
+
+    Check(await Until(() => service.Hub.Get(Signals.AmpPower).Number == 488), "amp power read: " + service.BuildStatus().Sources.Amp.Error);
+    var endpoint = service.BuildStatus().Sources.Amp.Endpoint;
+    Check(endpoint == $"http://127.0.0.1:{api.Port}/zeus/api/plugins/com.n1mjf.hfamp/status", "listener port and prefix used: " + endpoint);
+    Check(await Until(() => wled.Segment(0)["ix"]!.GetValue<int>() == 38), "bar at 488 of 1300 W");
+    await app.StopAsync();
     await wled.App.StopAsync();
 });
 

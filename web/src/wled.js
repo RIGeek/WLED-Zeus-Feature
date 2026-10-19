@@ -434,13 +434,15 @@ function Panel({ api }) {
             Field({ label: 'Meter rate (ms)', type: 'number', inputMode: 'numeric', value: src.tciIntervalMs, onChange: (v) => setSrcDraft({ ...src, tciIntervalMs: v }) })) : null,
           src.tciEnabled ? h('p', { className: 'zw-note' }, `TCI: ${linkText(tciLink)}`) : null,
           Check({ label: 'Read the RZ1ZR amplifier feature (amp power and SWR)', checked: src.ampEnabled, onChange: (v) => setSrcDraft({ ...src, ampEnabled: v }) }),
-          src.ampEnabled ? h('div', { className: 'zw-row' },
-            h('input', {
-              type: 'text', value: src.zeusUrl, placeholder: 'Zeus address, e.g. http://127.0.0.1:…', 'aria-label': 'Zeus address',
-              autoComplete: 'off', spellCheck: false, onChange: (e) => setSrcDraft({ ...src, zeusUrl: e.target.value }),
-            }),
-            h('button', { type: 'button', title: 'The address this page was opened from', onClick: () => setSrcDraft({ ...src, zeusUrl: window.location.origin }) }, 'Use this Zeus')) : null,
-          src.ampEnabled ? h('p', { className: 'zw-note' }, `Amplifier: ${ampLink.state === 'idle' ? 'Waiting (no rule uses it yet)' : linkText(ampLink)}`) : null,
+          src.ampEnabled ? h('p', { className: 'zw-note' },
+            `Amplifier: ${ampLink.state === 'idle' ? 'Waiting (no rule uses amp power or amp SWR yet)'
+              : ampLink.state === 'waiting_for_zeus' ? 'Finding the amplifier feature…' : linkText(ampLink)}`,
+            ampLink.endpoint ? h('br') : null,
+            ampLink.endpoint ? h('span', { className: 'zw-item-id' }, ampLink.endpoint) : null) : null,
+          src.ampEnabled ? Field({
+            label: 'Zeus address (leave blank to find it automatically)', value: src.zeusUrl,
+            onChange: (v) => setSrcDraft({ ...src, zeusUrl: v }), placeholder: 'Automatic',
+          }) : null,
           h('div', { className: 'zw-row' },
             h('button', { type: 'submit', disabled: !srcDraft }, 'Save sources'),
             srcDraft ? h('button', { type: 'button', onClick: () => setSrcDraft(null) }, 'Discard') : null),
